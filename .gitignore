@@ -18,6 +18,7 @@
 
 # Segredos
   .env
+  concierge/.env
 
 # Testes
   .pytest_cache/
