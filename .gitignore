@@ -1,6 +1,29 @@
-__pycache__/
-*.py[cod]
-.env
-.venv/
-venv/
-.pytest_cache/
+# IDE e ferramentas
+  .claude/
+  .vscode/
+  .idea/
+
+# Python
+  __pycache__/
+  *.py[cod]
+  *$py.class
+  *.egg-info/
+  dist/
+  build/
+
+# Ambientes virtuais
+  .venv/
+  venv/
+  env/
+
+# Segredos
+  .env
+
+# Testes
+  .pytest_cache/
+  .coverage
+  htmlcov/
+
+# OS
+  .DS_Store
+  Thumbs.db
