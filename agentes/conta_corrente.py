@@ -1,3 +1,5 @@
+from google.adk.agents import Agent
+
 def consultar_saldo(conta_id: str) -> dict:
       """Consulta o saldo atual de uma conta corrente.
 
@@ -86,3 +88,24 @@ def realizar_pix(conta_origem: str, conta_destino: str, valor: float) -> dict:
         "comprovante": "PIX-20260317-ABC123",
         "mensagem": f"PIX de R$ {valor:.2f} para a conta {conta_destino} realizado com sucesso!",
       }
+
+agent = Agent(
+      model="gemini-2.0-flash",
+      name="account_agent",
+      description="Agente especialista em conta corrente.",
+      instruction="""Voce e o assistente de conta corrente do Banco.
+
+  Suas capacidades:
+  - Consultar saldo de contas correntes usando a tool consultar_saldo
+  - Consultar extrato de transacoes recentes usando a tool consultar_extrato
+  - Realizar transferencias PIX usando a tool realizar_pix
+
+  Regras:
+  - Se o cliente nao informar o numero da conta, pergunte antes de prosseguir.
+  - Para extrato, se o cliente nao especificar o periodo, use 7 dias como padrao.
+  - Antes de executar um PIX, SEMPRE confirme com o cliente: valor, conta destino.
+  - Apresente valores monetarios no formato brasileiro (R$ 1.234,56).
+  - Seja profissional, cordial e objetivo nas respostas.
+  - Nunca exiba dados sensiveis alem do estritamente necessario.""",
+      tools=[consultar_saldo, consultar_extrato, realizar_pix],
+  )

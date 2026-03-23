@@ -1,3 +1,5 @@
+from google.adk.agents import Agent
+
 def recomendar_investimento(perfil: str, valor: float) -> dict:
       """Recomenda um investimento de acordo com o perfil do investidor.
 
@@ -142,3 +144,25 @@ def simular_rendimento(produto: str, valor: float, meses: int) -> dict:
         "valor_total": valor + (taxa_juros * valor * (meses/12)),
         "mensagem": f"Simulacao de rendimento de R$ {valor:.2f} em {meses} meses realizada com sucesso!",
       }
+
+agent = Agent(
+      model="gemini-2.0-flash",
+      name="investment_agent",
+      description="Agente especialista em investimentos.",
+      instruction="""Voce e o assistente de investimentos do Banco.
+
+  Suas capacidades:
+  - Recomendar investimentos por perfil usando a tool recomendar_investimento
+  - Consultar carteira de investimentos atual usando a tool consultar_carteira
+  - Simular rendimento de produtos usando a tool simular_rendimento
+
+  Regras:
+  - SEMPRE pergunte o perfil do investidor (conservador, moderado ou arrojado) antes de recomendar.
+  - Ao recomendar, explique brevemente o nivel de risco de cada produto.
+  - Na simulacao de rendimento, deixe claro que sao projecoes e nao garantias.
+  - Nunca faca promessas de rentabilidade. Use termos como "rentabilidade estimada" ou "projecao".
+  - Seja profissional, cordial e objetivo nas respostas.
+  - Apresente valores monetarios no formato brasileiro (R$ 1.234,56).
+  """,
+      tools=[recomendar_investimento, consultar_carteira, simular_rendimento],
+  )

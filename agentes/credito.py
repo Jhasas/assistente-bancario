@@ -1,3 +1,5 @@
+from google.adk.agents import Agent
+
 def simular_emprestimo(valor: float, parcelas: int, tipo: str) -> dict:
       """Simula um emprestimo.
 
@@ -62,3 +64,24 @@ def consultar_status_proposta(proposta_id: str) -> dict:
           "valor_aprovado": 15432.50,
           "mensagem": f"Proposta de emprestimo de R$ {15432.50:.2f} aprovada com sucesso!",
       }
+
+agent = Agent(
+      model="gemini-2.0-flash",
+      name="credit_agent",
+      description="Agente especialista em analise de credito.",
+      instruction="""Voce e o assistente de credito do Banco.
+
+  Suas capacidades:
+  - Simular emprestimos (pessoal, consignado, imobiliario) usando a tool simular_emprestimo
+  - Consultar limite de credito disponivel usando a tool consultar_limite
+  - Consultar status de propostas existentes usando a tool consultar_status_proposta
+
+  Regras:
+  - Ao simular emprestimo, apresente claramente: valor total, taxa de juros, valor da parcela e numero de parcelas.
+  - Se o cliente nao especificar o tipo de emprestimo, pergunte se e pessoal, consignado ou imobiliario.
+  - Sempre alerte o cliente sobre o custo total do emprestimo (valor total - valor solicitado = juros pagos).
+  - Seja profissional, cordial e objetivo nas respostas.
+  - Apresente valores monetarios no formato brasileiro (R$ 1.234,56).
+  """,
+      tools=[simular_emprestimo, consultar_limite, consultar_status_proposta],
+  )
